@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Beanz - Commande en ligne</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-size: 56px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-weight: 400;
+            font-style: italic;
+            letter-spacing: 3px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            margin: 30px 0 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-weight: 500;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav button {
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px 20px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex: 1;
+            min-width: 110px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav button:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .nav button.active {
+            background: #fff;
+            color: #1a1a1a;
+            border-color: #fff;
+            box-shadow: 0 8px 20px rgba(255,255,255,0.2);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .profile-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .profile-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .points-badge {
+            font-family: 'Montserrat', sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            letter-spacing: 1px;
+        }
+
+        .profile-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #qrcode {
+            margin: 20px auto;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.3) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .menu-item h3 {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            margin-bottom: 12px;
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .menu-item p {
+            color: rgba(255,255,255,0.6);
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .menu-item button {
+            font-family: 'Montserrat', sans-serif;
+            width: 100%;
+            padding: 12px;
+            background: #fff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu-item button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(255,255,255,0.2);
+        }
+
+        .cart-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 12px 0;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .cart-item button {
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .cart-item button:hover {
+            background: #fff;
+            color: #1a1a1a;
+        }
+
+        .cart-total {
+            font-family: 'Playfair Display', serif;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            font-family: 'Montserrat', sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+        }
+
+        .order-qr {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-login {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-login input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .admin-login input:focus {
+            outline: none;
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+        }
+
+        .admin-login input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .order-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 3px solid #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transform: translateX(4px);
+        }
+
+        .order-items {
+            margin: 15px 0;
+            padding-left: 20px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        #reader {
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .scanned-order {
+            background: rgba(255,255,255,0.08);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .reward-card {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .reward-card::before {
+            content: '☕';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.05;
+            top: -20px;
+            right: -20px;
+        }
+
+        .reward-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .reward-card p {
+            font-size: 16px;
+            margin: 15px 0;
+            opacity: 0.8;
+        }
+
+        .reward-card button {
+            font-family: 'Montserrat', sans-serif;
+            background: white;
+            color: #1a1a1a;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .reward-card button:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+        }
+
+        .reward-card button:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toast {
+            font-family: 'Montserrat', sans-serif;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 16px 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .toast.preparing {
+            background: #3a3a3a;
+            color: #fff;
+        }
+
+        .toast.error {
+            background: #4a4a4a;
+            color: #fff;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .server-config {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .server-config label {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .server-config input {
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            margin-right: 10px;
+            width: 300px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .server-config input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .server-config button {
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px 24px;
+            background: #fff;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .server-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .server-status.connected {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .server-status.disconnected {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Historique des points */
+        .history-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 3px solid #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .history-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transform: translateX(4px);
+        }
+
+        .history-card.clickcollect {
+            border-left-color: #888;
+        }
+
+        .history-card.prepare {
+            border-left-color: #fff;
+        }
+
+        .history-card.reward {
+            border-left-color: #666;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-type {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: #1a1a1a;
+        }
+
+        .history-type.clickcollect {
+            background: #888;
+            color: #fff;
+        }
+
+        .history-type.prepare {
+            background: #fff;
+        }
+
+        .history-type.reward {
+            background: #666;
+            color: #fff;
+        }
+
+        .history-points {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .history-points.negative {
+            color: #888;
+        }
+
+        .history-date {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .history-items {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            padding-left: 10px;
+            border-left: 2px solid rgba(255,255,255,0.1);
+            margin-top: 10px;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.5);
+            font-size: 16px;
+        }
+
+        /* Système d'authentification */
+        .auth-section {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .auth-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 15px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.7);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .auth-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #1a1a1a;
+            border-color: #fff;
+        }
+
+        .auth-form-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .auth-input {
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+            color: #fff;
+        }
+
+        .auth-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper .auth-input {
+            padding-right: 45px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        .auth-btn {
+            padding: 14px;
+            background: white;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-error {
+            background: #4a4a4a;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .auth-success {
+            background: #3a3a3a;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        /* Profil connecté */
+        .user-info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .user-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .user-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+
+        .user-value {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .toggle-password-small {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 8px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-password-small:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modify-btn {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 12px;
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .modify-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            margin-top: 10px;
+            background: #4a4a4a;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #5a5a5a;
+        }
+
+        .modify-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .save-btn {
+            flex: 1;
+            background: #fff;
+            color: #1a1a1a;
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #4a4a4a;
+            color: white;
+            font-size: 12px;
+            padding: 10px;
+        }
+
+        #modifyPasswordForm {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #modifyPasswordForm .auth-input {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <div class="logo-icon">☕</div>
+            <h1>Coffee Beanz</h1>
+        </div>
+        <div class="subtitle">« Tout commence par un bon café »</div>
+
+        <!-- Configuration du serveur -->
+        <div class="server-config">
+            <label><strong>URL du serveur JSON:</strong></label><br><br>
+            <input type="text" id="serverUrl" value="http://localhost:3000" placeholder="http://localhost:3000">
+            <button onclick="testConnection()">Tester</button>
+            <span id="serverStatus" class="server-status disconnected">Déconnecté</span>
+        </div>
+
+        <div class="nav">
+            <button onclick="showSection('profile')" class="active">Mon Profil</button>
+            <button onclick="showSection('menu')">Menu</button>
+            <button onclick="showSection('clickcollect')">Click & Collect</button>
+            <button onclick="showSection('prepare')">Ma Commande</button>
+            <button onclick="showSection('rewards')">Récompenses</button>
+            <button onclick="showSection('admin')">Admin</button>
+        </div>
+
+        <!-- PROFIL -->
+        <div id="profile" class="section active">
+            <h2>Mon Profil</h2>
+            <div class="profile-card">
+                <div class="profile-info">
+                    <div>
+                        <h3>ID Client: <span id="userId">12345</span></h3>
+                    </div>
+                    <div class="points-badge">
+                        <span id="userPoints">0</span> Points
+                    </div>
+                </div>
+                <div class="profile-content">
+                    <div id="qrcode"></div>
+                    
+                    <!-- Zone Connexion/Inscription -->
+                    <div class="auth-section">
+                        <!-- Formulaire non connecté -->
+                        <div id="authForm">
+                            <h3 class="auth-title">👤 Mon Compte</h3>
+                            
+                            <div class="auth-tabs">
+                                <button class="auth-tab active" onclick="showAuthTab('login')">Connexion</button>
+                                <button class="auth-tab" onclick="showAuthTab('register')">Inscription</button>
+                            </div>
+                            
+                            <!-- Connexion -->
+                            <div id="loginForm" class="auth-form-content">
+                                <input type="text" id="loginPseudo" placeholder="Pseudo" class="auth-input">
+                                <div class="password-wrapper">
+                                    <input type="password" id="loginPassword" placeholder="Mot de passe" class="auth-input">
+                                    <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">👁️</button>
+                                </div>
+                                <button class="auth-btn" onclick="loginUser()">Se connecter</button>
+                            </div>
+                            
+                            <!-- Inscription -->
+                            <div id="registerForm" class="auth-form-content" style="display:none;">
+                                <input type="text" id="registerPseudo" placeholder="Choisir un pseudo" class="auth-input">
+                                <div class="password-wrapper">
+                                    <input type="password" id="registerPassword" placeholder="Choisir un mot de passe" class="auth-input">
+                                    <button type="button" class="toggle-password" onclick="togglePassword('registerPassword')">👁️</button>
+                                </div>
+                                <button class="auth-btn" onclick="registerUser()">S'inscrire</button>
+                            </div>
+                            
+                            <div id="authError" class="auth-error" style="display:none;"></div>
+                            <div id="authSuccess" class="auth-success" style="display:none;"></div>
+                        </div>
+                        
+                        <!-- Profil connecté -->
+                        <div id="userProfile" style="display:none;">
+                            <h3 class="auth-title">👤 Connecté</h3>
+                            <div class="user-info-card">
+                                <div class="user-info-row">
+                                    <span class="user-label">Pseudo:</span>
+                                    <span class="user-value" id="displayPseudo">-</span>
+                                </div>
+                                <div class="user-info-row">
+                                    <span class="user-label">Mot de passe:</span>
+                                    <span class="user-value">
+                                        <span id="displayPassword">••••••••</span>
+                                        <button class="toggle-password-small" onclick="toggleDisplayPassword()">👁️</button>
+                                    </span>
+                                </div>
+                                <button class="auth-btn modify-btn" onclick="showModifyPassword()">✏️ Modifier mot de passe</button>
+                                
+                                <!-- Formulaire modification mot de passe -->
+                                <div id="modifyPasswordForm" style="display:none;">
+                                    <div class="password-wrapper">
+                                        <input type="password" id="newPassword" placeholder="Nouveau mot de passe" class="auth-input">
+                                        <button type="button" class="toggle-password" onclick="togglePassword('newPassword')">👁️</button>
+                                    </div>
+                                    <div class="modify-buttons">
+                                        <button class="auth-btn save-btn" onclick="saveNewPassword()">💾 Sauvegarder</button>
+                                        <button class="auth-btn cancel-btn" onclick="cancelModifyPassword()">✖️ Annuler</button>
+                                    </div>
+                                </div>
+                                
+                                <button class="auth-btn logout-btn" onclick="logoutUser()">🚪 Se déconnecter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Historique des Points</h2>
+            <div id="pointsHistory">
+                <p>Chargement de l'historique...</p>
+            </div>
+        </div>
+
+        <!-- MENU -->
+        <div id="menu" class="section">
+            <h2>Notre Menu</h2>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+
+        <!-- CLICK & COLLECT -->
+        <div id="clickcollect" class="section">
+            <h2>Click & Collect</h2>
+            <div id="ccCart"></div>
+            <div id="ccTotal" class="cart-total" style="display:none;">
+                Total: <span id="ccTotalPrice">0</span>€ | Points: <span id="ccTotalPoints">0</span>
+            </div>
+            <button class="btn-primary" onclick="validateClickCollect()" id="ccValidateBtn" style="display:none;">Valider et Payer</button>
+            <div id="ccSuccess" style="display:none;"></div>
+        </div>
+
+        <!-- PREPARER COMMANDE -->
+        <div id="prepare" class="section">
+            <h2>Préparer ma commande</h2>
+            <div id="prepareCart"></div>
+            <div id="prepareTotal" class="cart-total" style="display:none;">
+                Total: <span id="prepareTotalPrice">0</span>€ | Points: <span id="prepareTotalPoints">0</span>
+            </div>
+            <button class="btn-primary" onclick="generateOrderQR()" id="prepareValidateBtn" style="display:none;">Générer QR Code</button>
+            <div id="orderQRSection" style="display:none;" class="order-qr">
+                <h3>Scannez ce QR à la caisse</h3>
+                <div id="orderQRCode"></div>
+            </div>
+        </div>
+
+        <!-- RECOMPENSES -->
+        <div id="rewards" class="section">
+            <h2>Mes Récompenses</h2>
+            <div class="reward-card">
+                <h3>☕ Café Offert</h3>
+                <p>Échangez vos points contre un café gratuit !</p>
+                <p style="font-size: 20px; font-weight: 600;">Coût: 50 Points</p>
+                <p>Vos points: <span id="rewardsPoints">0</span></p>
+                <button onclick="redeemReward()" id="redeemBtn">Échanger</button>
+            </div>
+            <div id="rewardSuccess" style="display:none;"></div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="admin" class="section">
+            <div id="adminLogin" class="admin-login">
+                <h2>Accès Admin</h2>
+                <input type="password" id="adminCode" placeholder="Code admin">
+                <button class="btn-primary" onclick="loginAdmin()">Se connecter</button>
+            </div>
+
+            <div id="adminPanel" style="display:none;">
+                <h2>Panneau Admin</h2>
+                
+                <h3>Commandes Click & Collect en cours</h3>
+                <div id="adminOrders"></div>
+
+                <h3 style="margin-top: 30px;">Scanner commande client</h3>
+                <button class="btn-primary" onclick="startScanner()">Démarrer le scanner</button>
+                <div id="reader"></div>
+                <div id="scannedOrderSection"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION JSON SERVER
+        // ============================================
+        
+        let API_BASE_URL = 'http://localhost:3000';
+
+        const api = {
+            async get(endpoint) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error(`GET ${endpoint} error:`, error);
+                    throw error;
+                }
+            },
+
+            async post(endpoint, data) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error(`POST ${endpoint} error:`, error);
+                    throw error;
+                }
+            },
+
+            async put(endpoint, data) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error(`PUT ${endpoint} error:`, error);
+                    throw error;
+                }
+            },
+
+            async patch(endpoint, data) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error(`PATCH ${endpoint} error:`, error);
+                    throw error;
+                }
+            },
+
+            async delete(endpoint) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                        method: 'DELETE'
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return true;
+                } catch (error) {
+                    console.error(`DELETE ${endpoint} error:`, error);
+                    throw error;
+                }
+            }
+        };
+
+        async function testConnection() {
+            const statusEl = document.getElementById('serverStatus');
+            API_BASE_URL = document.getElementById('serverUrl').value.trim();
+            
+            try {
+                statusEl.textContent = 'Test...';
+                statusEl.className = 'server-status';
+                
+                await api.get('/users');
+                
+                statusEl.textContent = 'Connecté ✓';
+                statusEl.className = 'server-status connected';
+                showToast('Connexion au serveur réussie !');
+                
+                await loadUserPoints();
+                
+            } catch (error) {
+                statusEl.textContent = 'Déconnecté ✗';
+                statusEl.className = 'server-status disconnected';
+                showToast('Erreur de connexion au serveur', 'error');
+            }
+        }
+
+        // ============================================
+        // DONNÉES DES PRODUITS
+        // ============================================
+        
+        const menuItems = [
+            { id: 1, name: "Espresso", price: 2.50, points: 5 },
+            { id: 2, name: "Cappuccino", price: 3.50, points: 7 },
+            { id: 3, name: "Latte", price: 4.00, points: 8 },
+            { id: 4, name: "Americano", price: 3.00, points: 6 },
+            { id: 5, name: "Mocha", price: 4.50, points: 9 },
+            { id: 6, name: "Croissant", price: 2.50, points: 5 },
+            { id: 7, name: "Pain au chocolat", price: 2.80, points: 6 },
+            { id: 8, name: "Muffin", price: 3.00, points: 6 },
+            { id: 9, name: "Smoothie Fruits", price: 5.00, points: 10 },
+            { id: 10, name: "Thé Premium", price: 3.50, points: 7 }
+        ];
+
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
+        
+        let currentUser = null;
+        let loggedInUser = null;
+        let ccCart = [];
+        let prepareCart = [];
+        let html5QrCode = null;
+        let passwordVisible = false;
+
+        // ============================================
+        // INITIALISATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            generateUserQR();
+            displayMenu();
+            await testConnection();
+            loadPointsHistory();
+            checkLoggedInUser();
+        });
+
+        // ============================================
+        // AUTHENTIFICATION
+        // ============================================
+
+        function showAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
+            
+            hideAuthMessages();
+        }
+
+        function hideAuthMessages() {
+            document.getElementById('authError').style.display = 'none';
+            document.getElementById('authSuccess').style.display = 'none';
+        }
+
+        function showAuthError(message) {
+            const errorEl = document.getElementById('authError');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            document.getElementById('authSuccess').style.display = 'none';
+        }
+
+        function showAuthSuccess(message) {
+            const successEl = document.getElementById('authSuccess');
+            successEl.textContent = message;
+            successEl.style.display = 'block';
+            document.getElementById('authError').style.display = 'none';
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        async function registerUser() {
+            const pseudo = document.getElementById('registerPseudo').value.trim();
+            const password = document.getElementById('registerPassword').value;
+
+            hideAuthMessages();
+
+            if (!pseudo || !password) {
+                showAuthError('Veuillez remplir tous les champs');
+                return;
+            }
+
+            if (pseudo.length < 3) {
+                showAuthError('Le pseudo doit contenir au moins 3 caractères');
+                return;
+            }
+
+            if (password.length < 4) {
+                showAuthError('Le mot de passe doit contenir au moins 4 caractères');
+                return;
+            }
+
+            try {
+                let existingUsers = [];
+                try {
+                    existingUsers = await api.get(`/accounts?pseudo=${pseudo}`);
+                } catch (e) {
+                    console.log('Collection accounts peut-être inexistante, on tente de créer');
+                }
+                
+                if (existingUsers.length > 0) {
+                    showAuthError('Ce pseudo est déjà utilisé');
+                    return;
+                }
+
+                const clientId = 'USER_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                
+                const newAccount = await api.post('/accounts', {
+                    pseudo: pseudo,
+                    password: password,
+                    clientId: clientId,
+                    createdAt: new Date().toISOString()
+                });
+
+                await api.post('/users', {
+                    clientId: clientId,
+                    points: 0,
+                    createdAt: new Date().toISOString()
+                });
+
+                showAuthSuccess('Inscription réussie ! Vous pouvez vous connecter.');
+                
+                document.getElementById('registerPseudo').value = '';
+                document.getElementById('registerPassword').value = '';
+
+                setTimeout(() => {
+                    document.querySelector('.auth-tab').click();
+                }, 1500);
+
+            } catch (error) {
+                console.error('Erreur inscription:', error);
+                showAuthError('Erreur: ' + (error.message || 'Vérifiez que le serveur est accessible'));
+            }
+        }
+
+        async function loginUser() {
+            const pseudo = document.getElementById('loginPseudo').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            hideAuthMessages();
+
+            if (!pseudo || !password) {
+                showAuthError('Veuillez remplir tous les champs');
+                return;
+            }
+
+            try {
+                const accounts = await api.get(`/accounts?pseudo=${pseudo}`);
+                
+                if (accounts.length === 0) {
+                    showAuthError('Pseudo introuvable. Inscrivez-vous d\'abord !');
+                    return;
+                }
+
+                const account = accounts[0];
+
+                if (account.password !== password) {
+                    showAuthError('Mot de passe incorrect');
+                    return;
+                }
+
+                loggedInUser = account;
+                
+                document.getElementById('userId').textContent = account.clientId;
+                
+                sessionStorage.setItem('loggedInUser', JSON.stringify(account));
+
+                await loadUserPoints();
+                loadPointsHistory();
+
+                showLoggedInProfile();
+                
+                showToast(`Bienvenue ${pseudo} !`);
+
+            } catch (error) {
+                console.error('Erreur connexion:', error);
+                showAuthError('Erreur lors de la connexion');
+            }
+        }
+
+        function showLoggedInProfile() {
+            document.getElementById('authForm').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'block';
+            document.getElementById('displayPseudo').textContent = loggedInUser.pseudo;
+            document.getElementById('displayPassword').textContent = '••••••••';
+            passwordVisible = false;
+        }
+
+        function checkLoggedInUser() {
+            const savedUser = sessionStorage.getItem('loggedInUser');
+            if (savedUser) {
+                loggedInUser = JSON.parse(savedUser);
+                document.getElementById('userId').textContent = loggedInUser.clientId;
+                showLoggedInProfile();
+            }
+        }
+
+        function toggleDisplayPassword() {
+            const displayEl = document.getElementById('displayPassword');
+            passwordVisible = !passwordVisible;
+            
+            if (passwordVisible) {
+                displayEl.textContent = loggedInUser.password;
+            } else {
+                displayEl.textContent = '••••••••';
+            }
+        }
+
+        function showModifyPassword() {
+            document.getElementById('modifyPasswordForm').style.display = 'block';
+            document.getElementById('newPassword').value = '';
+        }
+
+        function cancelModifyPassword() {
+            document.getElementById('modifyPasswordForm').style.display = 'none';
+        }
+
+        async function saveNewPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+
+            if (!newPassword || newPassword.length < 4) {
+                showToast('Le mot de passe doit contenir au moins 4 caractères', 'error');
+                return;
+            }
+
+            try {
+                await api.patch(`/accounts/${loggedInUser.id}`, {
+                    password: newPassword
+                });
+
+                loggedInUser.password = newPassword;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+                document.getElementById('modifyPasswordForm').style.display = 'none';
+                
+                if (passwordVisible) {
+                    document.getElementById('displayPassword').textContent = newPassword;
+                }
+
+                showToast('Mot de passe modifié avec succès !');
+
+            } catch (error) {
+                console.error('Erreur modification:', error);
+                showToast('Erreur lors de la modification', 'error');
+            }
+        }
+
+        function logoutUser() {
+            loggedInUser = null;
+            sessionStorage.removeItem('loggedInUser');
+            
+            document.getElementById('userId').textContent = '12345';
+            
+            document.getElementById('authForm').style.display = 'block';
+            document.getElementById('userProfile').style.display = 'none';
+            
+            document.getElementById('loginPseudo').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            loadUserPoints();
+            loadPointsHistory();
+            
+            document.getElementById('qrcode').innerHTML = '';
+            generateUserQR();
+            
+            showToast('Déconnexion réussie');
+        }
+
+        // ============================================
+        // GESTION DES UTILISATEURS
+        // ============================================
+        
+        async function loadUserPoints() {
+            const userId = document.getElementById('userId').textContent;
+            
+            try {
+                const users = await api.get(`/users?clientId=${userId}`);
+                
+                if (users.length > 0) {
+                    currentUser = users[0];
+                } else {
+                    currentUser = await api.post('/users', {
+                        clientId: userId,
+                        points: 0,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                
+                updatePointsDisplay();
+                
+            } catch (error) {
+                console.error('Erreur chargement utilisateur:', error);
+                showToast('Erreur de chargement des points', 'error');
+            }
+        }
+
+        async function saveUserPoints() {
+            if (!currentUser) return;
+            
+            try {
+                await api.patch(`/users/${currentUser.id}`, {
+                    points: currentUser.points
+                });
+                updatePointsDisplay();
+            } catch (error) {
+                console.error('Erreur sauvegarde points:', error);
+                showToast('Erreur de sauvegarde', 'error');
+            }
+        }
+
+        function updatePointsDisplay() {
+            if (currentUser) {
+                document.getElementById('userPoints').textContent = currentUser.points;
+            }
+        }
+
+        // ============================================
+        // HISTORIQUE DES POINTS
+        // ============================================
+        
+        async function loadPointsHistory() {
+            const historyDiv = document.getElementById('pointsHistory');
+            const clientId = document.getElementById('userId').textContent;
+            
+            try {
+                const [orders, rewards] = await Promise.all([
+                    api.get(`/orders?clientId=${clientId}`),
+                    api.get(`/rewards?clientId=${clientId}`)
+                ]);
+
+                const history = [
+                    ...orders.map(order => ({
+                        type: order.type === 'clickcollect' ? 'clickcollect' : 'prepare',
+                        items: order.items || [],
+                        points: order.points,
+                        date: order.createdAt || order.completedAt,
+                        isPositive: true
+                    })),
+                    ...rewards.map(reward => ({
+                        type: 'reward',
+                        items: [{ name: reward.type === 'free_drink' ? 'Café offert' : 'Récompense' }],
+                        points: reward.pointsCost,
+                        date: reward.redeemedAt,
+                        isPositive: false
+                    }))
+                ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (history.length === 0) {
+                    historyDiv.innerHTML = `
+                        <div class="history-empty">
+                            ☕ Aucun historique pour le moment.<br>
+                            Passez une commande pour gagner des points !
+                        </div>
+                    `;
+                    return;
+                }
+
+                historyDiv.innerHTML = history.map(entry => {
+                    const typeLabel = getTypeLabel(entry.type);
+                    const typeClass = entry.type;
+                    const pointsSign = entry.isPositive ? '+' : '-';
+                    const pointsClass = entry.isPositive ? '' : 'negative';
+                    const formattedDate = formatDate(entry.date);
+                    const itemsList = entry.items && entry.items.length > 0 
+                        ? entry.items.map(item => item.name).join(', ')
+                        : 'Aucun article';
+
+                    return `
+                        <div class="history-card ${typeClass}">
+                            <div class="history-header">
+                                <span class="history-type ${typeClass}">${typeLabel}</span>
+                                <span class="history-points ${pointsClass}">${pointsSign}${entry.points} pts</span>
+                            </div>
+                            <div class="history-date">📅 ${formattedDate}</div>
+                            <div class="history-items">☕ ${itemsList}</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Erreur chargement historique:', error);
+                historyDiv.innerHTML = `
+                    <div class="history-empty">
+                        ⚠️ Erreur de chargement de l'historique.<br>
+                        Vérifiez la connexion au serveur.
+                    </div>
+                `;
+            }
+        }
+
+        function getTypeLabel(type) {
+            switch(type) {
+                case 'clickcollect': return '🖱️ Click & Collect';
+                case 'prepare': return '📱 Préparation';
+                case 'reward': return '🎁 Récompense';
+                default: return '📋 Commande';
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Date inconnue';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (sectionId === 'profile') {
+                loadPointsHistory();
+            } else if (sectionId === 'clickcollect') {
+                updateCCCart();
+            } else if (sectionId === 'prepare') {
+                updatePrepareCart();
+            } else if (sectionId === 'admin') {
+                document.getElementById('adminLogin').style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'none';
+                document.getElementById('adminCode').value = '';
+            } else if (sectionId === 'rewards') {
+                updateRewardsSection();
+            }
+        }
+
+        // ============================================
+        // QR CODE PROFIL
+        // ============================================
+        
+        function generateUserQR() {
+            const userId = document.getElementById('userId').textContent;
+            new QRCode(document.getElementById("qrcode"), {
+                text: userId,
+                width: 200,
+                height: 200
+            });
+        }
+
+        // ============================================
+        // MENU
+        // ============================================
+        
+        function displayMenu() {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = menuItems.map(item => `
+                <div class="menu-item">
+                    <h3>${item.name}</h3>
+                    <p>Prix: ${item.price.toFixed(2)}€</p>
+                    <p>Points: ${item.points}</p>
+                    <button onclick="addToCC(${item.id})">Click & Collect</button>
+                    <button onclick="addToPrepare(${item.id})">Ma Commande</button>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // CLICK & COLLECT
+        // ============================================
+        
+        function addToCC(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            ccCart.push({...item});
+            showToast(`${item.name} ajouté`, 'preparing');
+        }
+
+        function updateCCCart() {
+            const cartDiv = document.getElementById('ccCart');
+            if (ccCart.length === 0) {
+                cartDiv.innerHTML = '<p style="color: rgba(255,255,255,0.5);">Votre panier est vide</p>';
+                document.getElementById('ccTotal').style.display = 'none';
+                document.getElementById('ccValidateBtn').style.display = 'none';
+                return;
+            }
+
+            let total = 0;
+            let totalPoints = 0;
+
+            cartDiv.innerHTML = ccCart.map((item, index) => {
+                total += item.price;
+                totalPoints += item.points;
+                return `
+                    <div class="cart-item">
+                        <span>${item.name} - ${item.price.toFixed(2)}€ (${item.points} pts)</span>
+                        <button onclick="removeFromCC(${index})">Retirer</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('ccTotalPrice').textContent = total.toFixed(2);
+            document.getElementById('ccTotalPoints').textContent = totalPoints;
+            document.getElementById('ccTotal').style.display = 'block';
+            document.getElementById('ccValidateBtn').style.display = 'block';
+        }
+
+        function removeFromCC(index) {
+            ccCart.splice(index, 1);
+            updateCCCart();
+        }
+
+        async function validateClickCollect() {
+            if (ccCart.length === 0) return;
+
+            const totalPoints = ccCart.reduce((sum, item) => sum + item.points, 0);
+            const totalPrice = ccCart.reduce((sum, item) => sum + item.price, 0);
+
+            try {
+                const order = await api.post('/orders', {
+                    type: 'clickcollect',
+                    userId: currentUser ? currentUser.id : null,
+                    clientId: document.getElementById('userId').textContent,
+                    items: [...ccCart],
+                    total: totalPrice,
+                    points: totalPoints,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                });
+
+                if (currentUser) {
+                    currentUser.points += totalPoints;
+                    await saveUserPoints();
+                }
+
+                document.getElementById('ccSuccess').innerHTML = `
+                    <div class="success-message">
+                        ✅ Commande #${order.id} validée ! +${totalPoints} points ajoutés.<br>
+                        Votre commande sera prête sous 10 minutes.
+                    </div>
+                `;
+                document.getElementById('ccSuccess').style.display = 'block';
+
+                ccCart = [];
+                updateCCCart();
+
+                setTimeout(() => {
+                    document.getElementById('ccSuccess').style.display = 'none';
+                }, 5000);
+
+            } catch (error) {
+                showToast('Erreur lors de la validation', 'error');
+            }
+        }
+
+        // ============================================
+        // PREPARER MA COMMANDE
+        // ============================================
+        
+        function addToPrepare(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            prepareCart.push({...item});
+            showToast(`${item.name} ajouté au panier`);
+        }
+
+        function updatePrepareCart() {
+            const cartDiv = document.getElementById('prepareCart');
+            if (prepareCart.length === 0) {
+                cartDiv.innerHTML = '<p style="color: rgba(255,255,255,0.5);">Votre panier est vide</p>';
+                document.getElementById('prepareTotal').style.display = 'none';
+                document.getElementById('prepareValidateBtn').style.display = 'none';
+                return;
+            }
+
+            let total = 0;
+            let totalPoints = 0;
+
+            cartDiv.innerHTML = prepareCart.map((item, index) => {
+                total += item.price;
+                totalPoints += item.points;
+                return `
+                    <div class="cart-item">
+                        <span>${item.name} - ${item.price.toFixed(2)}€ (${item.points} pts)</span>
+                        <button onclick="removeFromPrepare(${index})">Retirer</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('prepareTotalPrice').textContent = total.toFixed(2);
+            document.getElementById('prepareTotalPoints').textContent = totalPoints;
+            document.getElementById('prepareTotal').style.display = 'block';
+            document.getElementById('prepareValidateBtn').style.display = 'block';
+        }
+
+        function removeFromPrepare(index) {
+            prepareCart.splice(index, 1);
+            updatePrepareCart();
+        }
+
+        async function generateOrderQR() {
+            if (prepareCart.length === 0) return;
+
+            try {
+                const orderData = {
+                    type: 'pending',
+                    userId: currentUser ? currentUser.id : null,
+                    clientId: document.getElementById('userId').textContent,
+                    items: prepareCart,
+                    total: prepareCart.reduce((sum, item) => sum + item.price, 0),
+                    points: prepareCart.reduce((sum, item) => sum + item.points, 0),
+                    status: 'waiting_payment',
+                    createdAt: new Date().toISOString()
+                };
+
+                const savedOrder = await api.post('/pendingOrders', orderData);
+
+                const qrData = `ORDER:${savedOrder.id}`;
+
+                document.getElementById('orderQRCode').innerHTML = '';
+                new QRCode(document.getElementById("orderQRCode"), {
+                    text: qrData,
+                    width: 200,
+                    height: 200,
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+
+                document.getElementById('orderQRSection').style.display = 'block';
+                showToast('QR Code généré avec succès !');
+
+                prepareCart = [];
+                updatePrepareCart();
+
+            } catch (error) {
+                showToast('Erreur lors de la génération du QR', 'error');
+            }
+        }
+
+        // ============================================
+        // ADMIN
+        // ============================================
+        
+        function loginAdmin() {
+            const code = document.getElementById('adminCode').value;
+            if (code === '123') {
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAdminOrders();
+            } else {
+                alert('Code incorrect');
+            }
+        }
+
+        async function loadAdminOrders() {
+            const ordersDiv = document.getElementById('adminOrders');
+
+            try {
+                const orders = await api.get('/orders?status=pending');
+
+                if (orders.length === 0) {
+                    ordersDiv.innerHTML = '<p style="color: rgba(255,255,255,0.5);">Aucune commande en cours</p>';
+                    return;
+                }
+
+                ordersDiv.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <strong>Commande #${order.id}</strong><br>
+                        ${new Date(order.createdAt).toLocaleString()}<br>
+                        <div class="order-items">
+                            ${order.items.map(item => `${item.name}`).join(', ')}
+                        </div>
+                        Total: ${order.total.toFixed(2)}€ | Points: ${order.points}<br>
+                        <button class="btn-primary" style="margin-top:10px;" onclick="markOrderComplete(${order.id})">Terminée</button>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                ordersDiv.innerHTML = '<p style="color: rgba(255,255,255,0.5);">Erreur de chargement</p>';
+            }
+        }
+
+        async function markOrderComplete(orderId) {
+            try {
+                await api.patch(`/orders/${orderId}`, {
+                    status: 'completed',
+                    completedAt: new Date().toISOString()
+                });
+                
+                loadAdminOrders();
+                showToast('Commande terminée');
+                
+            } catch (error) {
+                showToast('Erreur', 'error');
+            }
+        }
+
+        function startScanner() {
+            const readerDiv = document.getElementById('reader');
+            readerDiv.style.display = 'block';
+
+            if (html5QrCode) {
+                html5QrCode.stop();
+            }
+
+            html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                onScanSuccess
+            ).catch(err => {
+                alert("Erreur caméra: " + err);
+            });
+        }
+
+        async function onScanSuccess(decodedText) {
+            try {
+                html5QrCode.stop();
+                document.getElementById('reader').style.display = 'none';
+
+                if (decodedText.startsWith('ORDER:')) {
+                    const orderId = decodedText.replace('ORDER:', '');
+                    const orderData = await api.get(`/pendingOrders/${orderId}`);
+                    displayScannedOrder(orderData);
+                } else {
+                    const orderData = JSON.parse(decodedText);
+                    displayScannedOrder(orderData);
+                }
+                
+            } catch (e) {
+                console.error('Erreur scan:', e);
+                showToast('QR code invalide ou commande introuvable', 'error');
+            }
+        }
+
+        function displayScannedOrder(orderData) {
+            const section = document.getElementById('scannedOrderSection');
+            const orderId = orderData.id || orderData.orderId;
+            const itemsJson = encodeURIComponent(JSON.stringify(orderData.items));
+            
+            section.innerHTML = `
+                <div class="scanned-order">
+                    <h3>Commande scannée</h3>
+                    <p><strong>Client ID:</strong> ${orderData.clientId}</p>
+                    <p><strong>Commande #${orderId}</strong></p>
+                    <div class="order-items">
+                        ${orderData.items.map(item => `<p>${item.name} - ${item.price.toFixed(2)}€</p>`).join('')}
+                    </div>
+                    <p><strong>Total:</strong> ${orderData.total.toFixed(2)}€</p>
+                    <p><strong>Points à créditer:</strong> ${orderData.points}</p>
+                    <button class="btn-primary" onclick="validateScannedOrder(${orderData.points}, ${orderId}, '${orderData.clientId}', '${itemsJson}', ${orderData.total})">
+                        Valider la commande
+                    </button>
+                </div>
+            `;
+        }
+
+        async function validateScannedOrder(points, orderId, clientId, itemsJson, total) {
+            try {
+                const items = JSON.parse(decodeURIComponent(itemsJson));
+                
+                const users = await api.get(`/users?clientId=${clientId}`);
+                
+                if (users.length > 0) {
+                    const user = users[0];
+                    await api.patch(`/users/${user.id}`, {
+                        points: user.points + points
+                    });
+                }
+
+                try {
+                    await api.delete(`/pendingOrders/${orderId}`);
+                } catch (e) {}
+
+                await api.post('/orders', {
+                    type: 'prepare',
+                    clientId: clientId,
+                    items: items,
+                    total: total,
+                    points: points,
+                    status: 'completed',
+                    createdAt: new Date().toISOString(),
+                    completedAt: new Date().toISOString()
+                });
+
+                if (currentUser && currentUser.clientId === clientId) {
+                    currentUser.points += points;
+                    updatePointsDisplay();
+                }
+
+                document.getElementById('scannedOrderSection').innerHTML = `
+                    <div class="success-message">
+                        ✅ Commande validée ! ${points} points crédités.
+                    </div>
+                `;
+
+                showToast(`${points} points crédités !`);
+
+            } catch (error) {
+                showToast('Erreur lors de la validation', 'error');
+            }
+        }
+
+        // ============================================
+        // RECOMPENSES
+        // ============================================
+        
+        function updateRewardsSection() {
+            const points = currentUser ? currentUser.points : 0;
+            document.getElementById('rewardsPoints').textContent = points;
+            const redeemBtn = document.getElementById('redeemBtn');
+            
+            if (points >= 50) {
+                redeemBtn.disabled = false;
+                redeemBtn.textContent = 'Échanger';
+            } else {
+                redeemBtn.disabled = true;
+                redeemBtn.textContent = `Plus que ${50 - points} points`;
+            }
+        }
+
+        async function redeemReward() {
+            if (!currentUser || currentUser.points < 50) {
+                alert('Vous n\'avez pas assez de points');
+                return;
+            }
+
+            try {
+                currentUser.points -= 50;
+                await saveUserPoints();
+
+                await api.post('/rewards', {
+                    userId: currentUser.id,
+                    clientId: currentUser.clientId,
+                    type: 'free_drink',
+                    pointsCost: 50,
+                    redeemedAt: new Date().toISOString(),
+                    status: 'pending'
+                });
+                
+                document.getElementById('rewardSuccess').innerHTML = `
+                    <div class="success-message">
+                        ☕ Félicitations ! Vous avez obtenu un café offert !<br>
+                        Présentez votre profil à la caisse.
+                    </div>
+                `;
+                document.getElementById('rewardSuccess').style.display = 'block';
+
+                updateRewardsSection();
+
+                setTimeout(() => {
+                    document.getElementById('rewardSuccess').style.display = 'none';
+                }, 5000);
+
+            } catch (error) {
+                showToast('Erreur lors de l\'échange', 'error');
+            }
+        }
+
+        // ============================================
+        // UTILITAIRES
+        // ============================================
+        
+        function showToast(message, type = '') {
+            const toast = document.createElement('div');
+            toast.className = 'toast' + (type ? ' ' + type : '');
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
