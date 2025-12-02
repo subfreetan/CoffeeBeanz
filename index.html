@@ -968,7 +968,7 @@
         <!-- Configuration du serveur -->
         <div class="server-config">
             <label><strong>URL du serveur JSON:</strong></label><br><br>
-            <input type="text" id="serverUrl" value="http://localhost:3000" placeholder="http://localhost:3000">
+            <input type="text" id="serverUrl" value="https://coffeebeanz.onrender.com" placeholder="https://coffeebeanz.onrender.com">
             <button onclick="testConnection()">Tester</button>
             <span id="serverStatus" class="server-status disconnected">Déconnecté</span>
         </div>
@@ -1145,7 +1145,7 @@
         // CONFIGURATION JSON SERVER
         // ============================================
         
-        let API_BASE_URL = 'http://localhost:3000';
+        let API_BASE_URL = 'https://coffeebeanz.onrender.com';
 
         const api = {
             async get(endpoint) {
